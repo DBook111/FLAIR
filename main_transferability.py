@@ -159,7 +159,7 @@ def main():
     parser.add_argument('--save_model', default=False, type=lambda x: (str(x).lower() == 'true'))
 
     # Experiment
-    parser.add_argument('--experiment', default='02_MESSIDOR',
+    parser.add_argument('--experiment', default='25_REFUGE',
                         help='02_MESSIDOR - 13_FIVES - 25_REFUGE - 08_ODIR200x3 - 05_20x3 - 38_MMAC23_train')
     parser.add_argument('--experiment_test', default='',
                         help='02_MESIDOR, 37_DeepDRiD_online_test, 38_MMAC23A_test, 38_MMAC23B_test',
@@ -181,8 +181,8 @@ def main():
     parser.add_argument('--shots_test', default="100%", type=lambda x: (str(x)))
     parser.add_argument('--balance', default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--folds', default=1, type=int)
-    parser.add_argument('--batch_size', default=4, type=int)
-    parser.add_argument('--batch_size_test', default=4, type=int)
+    parser.add_argument('--batch_size', default=1, type=int)
+    parser.add_argument('--batch_size_test', default=1, type=int)
     parser.add_argument('--size', default=(512, 512), help="(512, 512) | (2048, 4096) ")
     parser.add_argument('--resize_canvas', default=False, type=lambda x: (str(x).lower() == 'true'))
 

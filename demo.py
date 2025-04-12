@@ -26,7 +26,7 @@ print(f"After model loading GPU memory: {torch.cuda.memory_allocated() / 1024**2
 # Load image and set target categories 
 # (if the repo is not cloned, download the image and change the path!)
 # image = np.array(Image.open("./documents/sample_macular_hole.png"))
-image = np.array(Image.open("/home/image/nvme/ZhouZhiLin/zhouzhilin/FoundationModel/FLAIR/documents/normal_sample.png"))
+image = np.array(Image.open("/home/image/nvme/ZhouZhiLin/zhouzhilin/FoundationModel/FLAIR/local_data/datasets/REFUGE/REFUGE-Validation400/V0001.jpg"))
 text = ["normal", "healthy", "macular edema", "diabetic retinopathy", 
         "glaucoma", "macular hole", "lesion", "lesion in the macula"]
 
