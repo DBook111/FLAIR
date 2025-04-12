@@ -217,8 +217,8 @@ class FineTuning(object):
                         images, Y = self.transforms(images, Y.to(torch.float32))
 
                 # Forward
-                x = self.model.vision_model(images)
-                logits = self.model.classifier(x)
+                x = self.model.vision_model(images) # torch.Size([1, 512])
+                logits = self.model.classifier(x) # torch.Size([1, 2])
 
                 # Get loss
                 if logits.shape[-1] == 1:  # Fix for binary case and bce with logits

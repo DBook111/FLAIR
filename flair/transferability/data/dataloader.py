@@ -32,12 +32,12 @@ def get_dataloader_splits(dataframe_path, data_root_path, targets_dict, shots_tr
     data = []
     dataframe = pd.read_csv(dataframe_path)
     for i in range(len(dataframe)):
-        sample_df = dataframe.loc[i, :].to_dict()
+        sample_df = dataframe.loc[i, :].to_dict() # 从数据框中提取第 i 行的所有数据，并将其转换为字典格式。
         # Image path
         data_i = {"image_path": data_root_path + sample_df["image"]}
         if task == "classification":
             # Image label
-            data_i["label"] = targets_dict[eval(sample_df["categories"])[0]]
+            data_i["label"] = targets_dict[eval(sample_df["categories"])[0]] # 将 sample_df["categories"] 中的第一个类别转换为整数标签。
         if task == "segmentation":
             # Mask path
             data_i["mask_path"] = data_root_path + sample_df["mask"]
@@ -54,11 +54,11 @@ def get_dataloader_splits(dataframe_path, data_root_path, targets_dict, shots_tr
 
     data_train, data_val, data_test = [], [], []
     for iLabel in unique_labels:
-        idx = list(np.squeeze(np.argwhere(labels == iLabel)))
+        idx = list(np.squeeze(np.argwhere(labels == iLabel))) # 获取所有标签为 iLabel 的样本的索引。
 
-        train_samples = get_shots(shots_train, len(idx))
-        val_samples = get_shots(shots_val, len(idx))
-        test_samples = get_shots(shots_test, len(idx))
+        train_samples = get_shots(shots_train, len(idx)) # 根据 shots_train 的百分比计算训练样本的数量。
+        val_samples = get_shots(shots_val, len(idx)) # 根据 shots_val 的百分比计算验证样本的数量。
+        test_samples = get_shots(shots_test, len(idx)) # 根据 shots_test 的百分比计算测试样本的数量。
 
         [data_test.append(data[iidx]) for iidx in idx[:test_samples]]
         [data_train.append(data[iidx]) for iidx in idx[test_samples:test_samples+train_samples]]

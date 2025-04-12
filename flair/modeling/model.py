@@ -18,6 +18,9 @@ from transformers import AutoModel, AutoTokenizer, logging
 logging.set_verbosity_error()
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
+# 设置Hugging Face镜像源为国内镜像
+os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
+
 # Device for training/inference
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 

@@ -9,7 +9,7 @@ PATH_DATASETS = "/home/image/nvme/ZhouZhiLin/zhouzhilin/FoundationModel/FLAIR/lo
 
 # Path with pretraining and transferability dataframes
 PATH_DATAFRAME_PRETRAIN = "./local_data/dataframes/pretraining/"
-PATH_DATAFRAME_TRANSFERABILITY = "/home/image/nvme/ZhouZhiLin/zhouzhilin/FoundationModel/FLAIR/local_data/dataframes/transferability"
+PATH_DATAFRAME_TRANSFERABILITY = "/home/image/nvme/ZhouZhiLin/zhouzhilin/FoundationModel/FLAIR/local_data/dataframes/transferability/"
 PATH_DATAFRAME_TRANSFERABILITY_CLASSIFICATION = PATH_DATAFRAME_TRANSFERABILITY + "classification/"
 PATH_DATAFRAME_TRANSFERABILITY_SEGMENTATION = PATH_DATAFRAME_TRANSFERABILITY + "segmentation/"
 

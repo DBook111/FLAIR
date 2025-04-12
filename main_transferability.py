@@ -81,20 +81,28 @@ def process(args):
         # Init FLAIR model
         model = FLAIRModel(from_checkpoint=args.load_weights, weights_path=args.weights_path,
                            projection=args.project_features, norm_features=args.norm_features,
-                           vision_pretrained=args.init_imagenet)
+                           vision_pretrained=args.init_imagenet) # 后三个参数有什么用？
 
         # Set datasets
-        args.loaders = get_dataloader_splits(args.setting["dataframe"], args.data_root_path, args.setting["targets"],
-                                             shots_train=args.shots_train, shots_val=args.shots_val,
-                                             shots_test=args.shots_test, balance=args.balance,
-                                             batch_size=args.batch_size, num_workers=args.num_workers, seed=iFold,
-                                             task=args.setting["task"], size=args.size,
-                                             resize_canvas=args.resize_canvas, batch_size_test=args.batch_size_test)
+        args.loaders = get_dataloader_splits(args.setting["dataframe"], 
+                                             args.data_root_path, 
+                                             args.setting["targets"],
+                                             shots_train=args.shots_train, 
+                                             shots_val=args.shots_val,
+                                             shots_test=args.shots_test, 
+                                             balance=args.balance,
+                                             batch_size=args.batch_size, 
+                                             num_workers=args.num_workers, 
+                                             seed=iFold,
+                                             task=args.setting["task"], 
+                                             size=args.size,
+                                             resize_canvas=args.resize_canvas, 
+                                             batch_size_test=args.batch_size_test)
 
-        # Set adapter
-        adapter = init_adapter(model, args)
+        # Set adapter 冻结模型权重，添加一个linear probing（唯独不冻结）
+        adapter = init_adapter(model, args)     
 
-        # Fit adapter
+        # Fit adapter few-shot会用到，设置好数据集的百分比
         adapter.fit(args.loaders)
 
         # Test model - predict and evaluate
@@ -165,10 +173,10 @@ def main():
                         help='02_MESIDOR, 37_DeepDRiD_online_test, 38_MMAC23A_test, 38_MMAC23B_test',
                         type=lambda s: [item for item in s.split(',')])
     parser.add_argument('--method', default='FT',
-                        help='lp - tipAdapter - tipAdapter-f - clipAdapter - FT - zero_shot -')
+                        help='lp - tipAdapter - tipAdapter-f - clipAdapter - FT - zero_shot - 修改此处时别忘对应修改划分数据集的比例')
 
     # Model base weights and architecture
-    parser.add_argument('--weights_path', default=None, help='./local_data/results/pretraining/resnet_v2_epoch15.pth')
+    parser.add_argument('--weights_path', default='/home/image/nvme/ZhouZhiLin/zhouzhilin/FoundationModel/FLAIR/flair/modeling/flair_pretrained_weights/flair_resnet.pth', help='')
     parser.add_argument('--load_weights', default=True, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--init_imagenet', default=True, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--architecture', default='resnet_v1', help='resnet_v1')
@@ -176,9 +184,9 @@ def main():
     parser.add_argument('--norm_features', default=True, type=lambda x: (str(x).lower() == 'true'))
 
     # Dataloaders: Training Validation - Testing
-    parser.add_argument('--shots_train', default="0%", type=lambda x: (str(x)))
-    parser.add_argument('--shots_val', default="0%", type=lambda x: (str(x)))
-    parser.add_argument('--shots_test', default="100%", type=lambda x: (str(x)))
+    parser.add_argument('--shots_train', default="10%", type=lambda x: (str(x)), help="0% - 10% - 20% - 30% - 40% - 50% - 60% - 70% - 80% - 90% - 100%")
+    parser.add_argument('--shots_val', default="10%", type=lambda x: (str(x)), help="0% - 10% - 20% - 30% - 40% - 50% - 60% - 70% - 80% - 90% - 100%")
+    parser.add_argument('--shots_test', default="80%", type=lambda x: (str(x)), help="0% - 10% - 20% - 30% - 40% - 50% - 60% - 70% - 80% - 90% - 100%")
     parser.add_argument('--balance', default=False, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--folds', default=1, type=int)
     parser.add_argument('--batch_size', default=1, type=int)
@@ -194,7 +202,7 @@ def main():
     parser.add_argument('--tta', default=False, type=lambda x: (str(x).lower() == 'true'))
 
     # Fine tuning setting
-    parser.add_argument('--epochs', default=50, type=int)
+    parser.add_argument('--epochs', default=50, type=int, help="50")
     parser.add_argument('--lr', default=1e-4, type=float)
     parser.add_argument('--update_bn', default=True, type=lambda x: (str(x).lower() == 'true'))
     parser.add_argument('--freeze_classifier', default=False, type=lambda x: (str(x).lower() == 'true'))
